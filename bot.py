@@ -1018,6 +1018,10 @@ async def main():
         if status == "approved":
             await state.clear()
             await send_profile(bot, message.chat.id, user_id)
+
+            # Показать reply-клавиатуру снизу отдельным сообщением
+            is_admin = user_id in ADMIN_IDS
+            await message.answer("Выберите действие:", reply_markup=main_menu_kb(is_admin=is_admin))
             return
 
         if status == "rejected":
@@ -1367,6 +1371,10 @@ async def main():
     @dp.message(F.text == "👤 Профиль")
     async def profile_handler(message: Message):
         await send_profile(bot, message.chat.id, message.from_user.id)
+
+        # Показать reply-клавиатуру снизу отдельным сообщением
+        is_admin = message.from_user.id in ADMIN_IDS
+        await message.answer("Выберите действие:", reply_markup=main_menu_kb(is_admin=is_admin))
 
     
     # ==========================
